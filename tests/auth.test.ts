@@ -1,5 +1,5 @@
 import assert from 'node:assert';
-import { authorize } from '../src/app/api/auth/[...nextauth]/route';
+import { authorize } from '../src/lib/auth';
 
 // We mock the NEXTAUTH_SECRET check by setting it before importing anything, 
 // but since the import already happened, let's just make sure we set env vars 
