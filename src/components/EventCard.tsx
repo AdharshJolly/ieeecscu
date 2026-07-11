@@ -1,12 +1,38 @@
 import React from 'react';
 import Link from 'next/link';
 
-export default function EventCard({ event }: { event: any }) {
-  // Simple heuristic for status based on year
-  const currentYear = new Date().getFullYear();
-  const isPast = event.date.includes((currentYear - 1).toString());
-  const isUpcoming = event.date.includes((currentYear + 1).toString()) || event.date.includes(currentYear.toString());
-  
+export interface EventData {
+  _id?: string;
+  title: string;
+  type: string;
+  date: string | Date;
+  description?: string;
+  imageUrl?: string;
+  link?: string;
+}
+
+export default function EventCard({ event }: { event: EventData }) {
+  // Better heuristic for status based on Date parsing
+  let isPast = false;
+  let isUpcoming = false;
+
+  const eventDate = new Date(event.date);
+  const now = new Date();
+
+  if (!isNaN(eventDate.getTime())) {
+    // We can parse the date
+    const isToday = eventDate.toDateString() === now.toDateString();
+    if (!isToday) {
+      isPast = eventDate < now;
+      isUpcoming = eventDate > now;
+    }
+  } else if (typeof event.date === 'string') {
+    // Fallback heuristic if date is unparseable
+    const currentYear = now.getFullYear();
+    isPast = event.date.includes((currentYear - 1).toString());
+    isUpcoming = event.date.includes((currentYear + 1).toString()) || event.date.includes(currentYear.toString());
+  }
+
   const statusBadge = isPast ? (
     <span className="bg-gray-200 text-gray-800 text-xs px-2 py-1 rounded-full font-bold">Past</span>
   ) : isUpcoming ? (
@@ -14,6 +40,8 @@ export default function EventCard({ event }: { event: any }) {
   ) : (
     <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full font-bold animate-pulse">Live</span>
   );
+
+  const displayDate = typeof event.date === 'string' ? event.date : new Date(event.date).toLocaleDateString();
 
   return (
     <div role="listitem" className="articles-sm_item w-dyn-item transition transform hover:scale-105 hover:shadow-xl duration-300">
@@ -24,7 +52,7 @@ export default function EventCard({ event }: { event: any }) {
         </div>
         <div className="project-card_content-bottom p-4 bg-white dark:bg-gray-800 rounded-b-lg">
           <div className="article-card_info mb-2">
-            <div className="text-xs font-medium text-gray-600 dark:text-gray-400">{event.date}</div>
+            <div className="text-xs font-medium text-gray-600 dark:text-gray-400">{displayDate}</div>
           </div>
           <div className="article-card_name">
             <div className="text-lg font-bold text-gray-900 dark:text-white">{event.title}</div>
