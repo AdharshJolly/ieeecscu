@@ -158,7 +158,7 @@ export default function AdminEventsPage() {
                     </span>
                   </div>
                   <p className="text-sm text-gray-500 font-medium">
-                    {new Date(event.date).toLocaleDateString()} at {new Date(event.date).toLocaleTimeString()}
+                    {event.date}
                   </p>
                   <p className="text-sm text-gray-700 line-clamp-3">{event.description}</p>
                   {event.link && (
