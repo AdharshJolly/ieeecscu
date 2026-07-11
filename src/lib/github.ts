@@ -36,3 +36,23 @@ export async function deleteImageFromGithub(filename: string) {
     });
   }
 }
+
+export async function listImagesFromGithub() {
+  const path = 'public/uploads';
+  try {
+    const { data } = await octokit.repos.getContent({
+      owner,
+      repo,
+      path,
+    });
+    
+    if (Array.isArray(data)) {
+      return data
+        .filter(file => file.name.match(/\.(jpg|jpeg|png|gif|webp|svg)$/i))
+        .map(file => `/uploads/${file.name}`);
+    }
+  } catch {
+    return [];
+  }
+  return [];
+}
