@@ -1,7 +1,7 @@
 import Head from "next/head";
 import connectDB from "@/lib/db";
 import Event from "@/models/Event";
-import EventCard from "@/components/EventCard";
+import EventListClient from "@/components/EventListClient";
 
 export const dynamic = "force-dynamic";
 
@@ -193,14 +193,7 @@ export default async function Conferences() {
         <div className="global-padding">
           <div className="catagory-articles_wrapper">
             <div className="articles-sm-list_wrapper w-dyn-list">
-              <div role="list" className="articles-sm_list hr-flex w-dyn-items">
-                
-         {events.map((event: any) => (
-           <EventCard key={event._id} event={event} />
-         ))}
-         {events.length === 0 && <div className="w-full text-center py-12 text-gray-500">No events found.</div>}
-       
-              </div>
+              <EventListClient initialEvents={events} />
             </div>
           </div>
         </div>
