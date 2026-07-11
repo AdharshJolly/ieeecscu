@@ -1,13 +1,18 @@
 import Head from "next/head";
 import connectDB from "@/lib/db";
 import Event from "@/models/Event";
-import EventCard from "@/components/EventCard";
+import EventCard, { EventData } from "@/components/EventCard";
 
 export default async function Home() {
-  await connectDB();
-  // Fetch latest 3 events of any type, sorted by date descending
-  const rawLatestEvents = await Event.find({}).sort({ date: -1 }).limit(3);
-  const latestEvents = JSON.parse(JSON.stringify(rawLatestEvents));
+  let latestEvents: EventData[] = [];
+  try {
+    await connectDB();
+    // Fetch latest 3 events of any type, sorted by date descending
+    const rawLatestEvents = await Event.find({}).sort({ date: -1 }).limit(3).lean();
+    latestEvents = JSON.parse(JSON.stringify(rawLatestEvents));
+  } catch (error) {
+    console.error("Failed to fetch latest events:", error);
+  }
 
   return (
     <>
@@ -947,7 +952,7 @@ export default async function Home() {
              <p className="mt-4 text-gray-600 dark:text-gray-400">See what we've been up to recently.</p>
           </div>
           <div className="articles-sm_list hr-flex w-dyn-items grid grid-cols-1 md:grid-cols-3 gap-6">
-            {latestEvents.map((event: any) => (
+            {latestEvents.map((event: EventData) => (
               <EventCard key={event._id} event={event} />
             ))}
           </div>
