@@ -1,6 +1,7 @@
 import Head from "next/head";
 import connectDB from "@/lib/db";
 import Event from "@/models/Event";
+import EventCard from "@/components/EventCard";
 
 export const dynamic = "force-dynamic";
 

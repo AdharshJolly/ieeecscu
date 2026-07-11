@@ -1,6 +1,7 @@
 import Head from "next/head";
 import connectDB from "@/lib/db";
 import Event from "@/models/Event";
+import EventCard from "@/components/EventCard";
 
 export const dynamic = "force-dynamic";
 
@@ -195,90 +196,7 @@ export default async function Hackathons() {
               <div role="list" className="articles-sm_list hr-flex w-dyn-items">
                 
          {events.map((event: any) => (
-           <div role="listitem" key={event._id} className="articles-sm_item w-dyn-item">
-                  <a
-                    data-w-id="8d989806-bb7c-a715-4a52-bf61fecef93d"
-                    style={{}}
-                    href={event.link || "#"}
-                    className="project-card normal-card w-inline-block"
-                    ><div className="project-card_content-top all-articles">
-                      <img
-                        src={event.imageUrl || ""}
-                        loading="lazy"
-                        style={{}}
-                        alt=""
-                        className="image-100"
-                      />
-                      <div style={{}} className="article-card_button">
-                        <div className="project-card_arrow-wrapper">
-                          <div className="project-card_arrow-block">
-                            <div
-                              style={{}}
-                              className="button_arrow _1 w-embed"
-                            >
-                              <svg
-                                width="16"
-                                height="16"
-                                viewBox="0 0 16 16"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M10.6696 6.276L4.93156 12.014L3.98889 11.0713L9.72623 5.33333L4.66956 5.33333L4.66956 4L12.0029 4L12.0029 11.3333L10.6696 11.3333L10.6696 6.276V6.276Z"
-                                  fill="currentColor"
-                                />
-                              </svg>
-                            </div>
-                            <div
-                              style={{}}
-                              className="button_arrow _2 w-embed"
-                            >
-                              <svg
-                                width="16"
-                                height="16"
-                                viewBox="0 0 16 16"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M10.6696 6.276L4.93156 12.014L3.98889 11.0713L9.72623 5.33333L4.66956 5.33333L4.66956 4L12.0029 4L12.0029 11.3333L10.6696 11.3333L10.6696 6.276V6.276Z"
-                                  fill="currentColor"
-                                />
-                              </svg>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="project-card_content-bottom">
-                      <div className="article-card_info">
-                        <div className="text-xs text-weight-medium text-color-black-600">{event.date}</div>
-                      </div>
-                      <div className="article-card_name">
-                        <div className="text-lg-2 text-weight-medium text-color-black-900">{event.title}</div>
-                      </div>
-                    </div>
-                    <div className="article-card_catagory">
-                      <div className="card-catagory_wrapper">
-                        <div
-                          style={{}}
-                          className="car-catagory_slider"
-                        >
-                          <div
-                            className="text-xs text-weight-medium text-color-black-900"
-                          >
-                            Hackathon
-                          </div>
-                          <div
-                            className="text-xs text-weight-medium text-color-black-900"
-                          >
-                            Hackathon
-                          </div>
-                        </div>
-                      </div>
-                    </div></a
-                  >
-                </div>
+           <EventCard key={event._id} event={event} />
          ))}
          {events.length === 0 && <div className="w-full text-center py-12 text-gray-500">No events found.</div>}
        
