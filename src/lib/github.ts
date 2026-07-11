@@ -14,7 +14,7 @@ export async function uploadImageToGithub(filename: string, base64Content: strin
     message: `Upload media: ${filename}`,
     content: base64Content,
   });
-  return `/uploads/${filename}`; // Return local public path that Next.js can serve directly
+  return `https://raw.githubusercontent.com/${owner}/${repo}/main/${path}`;
 }
 
 export async function deleteImageFromGithub(filename: string) {
@@ -49,7 +49,7 @@ export async function listImagesFromGithub() {
     if (Array.isArray(data)) {
       return data
         .filter(file => file.name.match(/\.(jpg|jpeg|png|gif|webp|svg)$/i))
-        .map(file => `/uploads/${file.name}`);
+        .map(file => `https://raw.githubusercontent.com/${owner}/${repo}/main/${path}/${file.name}`);
     }
   } catch {
     return [];
