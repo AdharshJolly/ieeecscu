@@ -1,6 +1,14 @@
 import Head from "next/head";
+import connectDB from "@/lib/db";
+import Event from "@/models/Event";
+import EventCard from "@/components/EventCard";
 
-export default function Home() {
+export default async function Home() {
+  await connectDB();
+  // Fetch latest 3 events of any type, sorted by date descending
+  const rawLatestEvents = await Event.find({}).sort({ date: -1 }).limit(3);
+  const latestEvents = JSON.parse(JSON.stringify(rawLatestEvents));
+
   return (
     <>
       <div dangerouslySetInnerHTML={{ __html: `
@@ -927,6 +935,21 @@ export default function Home() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section className="section_latest-events section-margin py-16 bg-gray-50 dark:bg-gray-900">
+      <div className="w-layout-blockcontainer global-wrapper w-container">
+        <div className="global-padding">
+          <div className="mb-8 text-center">
+             <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Latest Events</h2>
+             <p className="mt-4 text-gray-600 dark:text-gray-400">See what we've been up to recently.</p>
+          </div>
+          <div className="articles-sm_list hr-flex w-dyn-items grid grid-cols-1 md:grid-cols-3 gap-6">
+            {latestEvents.map((event: any) => (
+              <EventCard key={event._id} event={event} />
+            ))}
           </div>
         </div>
       </div>
