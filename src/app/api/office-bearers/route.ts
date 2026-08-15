@@ -2,13 +2,19 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import connectDB from "@/lib/db";
-import Event from "@/models/Event";
+import OfficeBearer from "@/models/OfficeBearer";
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
+    const { searchParams } = new URL(req.url);
+    const year = searchParams.get("year");
+    
     await connectDB();
-    const events = await Event.find({}).sort({ date: -1 }).lean();
-    return NextResponse.json(events);
+    const query = year ? { year } : {};
+    
+    // Sort by order ascending
+    const bearers = await OfficeBearer.find(query).sort({ order: 1 }).lean();
+    return NextResponse.json(bearers);
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
@@ -24,10 +30,8 @@ export async function POST(req: Request) {
     const body = await req.json();
     await connectDB();
 
-    const newEvent = new Event(body);
-    await newEvent.save();
-
-    return NextResponse.json(newEvent, { status: 201 });
+    const newBearer = await OfficeBearer.create(body);
+    return NextResponse.json(newBearer, { status: 201 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 400 });
   }
