@@ -13,7 +13,11 @@ export interface IEvent extends Document {
 const EventSchema: Schema = new Schema({
   title: { type: String, required: true },
   type: { type: String, enum: ['hackathon', 'conference', 'workshop', 'talk'], required: true },
-  date: { type: String, required: true },
+  date: {
+    type: Date,
+    required: [true, "Please provide a date for this event."],
+    index: true,
+  },
   description: { type: String, required: true },
   imageUrl: { type: String },
   link: { type: String },

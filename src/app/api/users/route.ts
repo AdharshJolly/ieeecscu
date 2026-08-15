@@ -23,8 +23,8 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const session = await getServerSession(authOptions);
-    if ((session?.user as any)?.role !== 'SUPER_ADMIN') {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    if (!session || (session.user as any).role !== 'SUPER_ADMIN') {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const { name, email, password, role } = await req.json();
