@@ -16,10 +16,10 @@ export default function Navigation() {
             </Link>
           </div>
           <nav className="hidden md:flex space-x-8">
-            <Link href="#" className="text-gray-900 hover:text-gray-600 px-3 py-2 text-sm font-medium">
+            <Link href="/hackathons" className="text-gray-900 hover:text-gray-600 px-3 py-2 text-sm font-medium">
               Hackathons
             </Link>
-            <Link href="#" className="text-gray-900 hover:text-gray-600 px-3 py-2 text-sm font-medium">
+            <Link href="/conferences" className="text-gray-900 hover:text-gray-600 px-3 py-2 text-sm font-medium">
               Conferences
             </Link>
             <Link href="#" className="text-gray-900 hover:text-gray-600 px-3 py-2 text-sm font-medium">
