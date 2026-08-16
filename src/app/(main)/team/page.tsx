@@ -1,8 +1,25 @@
 import connectDB from "@/lib/db";
 import OfficeBearer from "@/models/OfficeBearer";
 import Image from "next/image";
+import Link from "next/link";
+
+import { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({ searchParams }: { searchParams: Promise<{ year?: string }> }): Promise<Metadata> {
+  const { year } = await searchParams;
+  const displayYear = year ? `${year}` : "Current";
+  
+  return {
+    title: `Office Bearers ${displayYear} | IEEE CS CU`,
+    description: `Meet the dedicated student leaders and faculty who drive the IEEE Computer Society Student Chapter at CHRIST University for the ${displayYear} academic year.`,
+    openGraph: {
+      title: `Office Bearers ${displayYear} | IEEE CS CU`,
+      description: `Meet the dedicated student leaders and faculty who drive the IEEE Computer Society Student Chapter at CHRIST University for the ${displayYear} academic year.`,
+    }
+  };
+}
 
 export default async function OfficeBearersPage({ searchParams }: { searchParams: Promise<{ year?: string }> }) {
   await connectDB();
@@ -38,7 +55,7 @@ export default async function OfficeBearersPage({ searchParams }: { searchParams
         {allYears.length > 0 && (
           <div className="flex flex-wrap justify-center gap-2 mb-16">
             {allYears.map((y: string) => (
-              <a 
+              <Link 
                 key={y}
                 href={`?year=${y}`}
                 className={`px-6 py-2 rounded-full font-bold transition-all ${
@@ -48,7 +65,7 @@ export default async function OfficeBearersPage({ searchParams }: { searchParams
                 }`}
               >
                 {y}
-              </a>
+              </Link>
             ))}
           </div>
         )}
