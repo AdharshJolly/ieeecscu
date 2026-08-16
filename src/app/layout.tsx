@@ -36,11 +36,6 @@ export const metadata: Metadata = {
     locale: "en_US",
     type: "website",
   },
-  icons: {
-    icon: "/assets/ieee_cs_cu.png",
-    shortcut: "/assets/ieee_cs_cu.png",
-    apple: "/assets/ieee_cs_cu.png",
-  },
 };
 
 export default function RootLayout({
