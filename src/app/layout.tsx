@@ -15,6 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://ieee-cs-cu.vercel.app"),
   title: {
     template: "%s | IEEE CS CHRIST University",
     default: "IEEE CS CHRIST University",
