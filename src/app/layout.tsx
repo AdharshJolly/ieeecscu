@@ -43,6 +43,16 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'EducationalOrganization',
+    name: 'IEEE Computer Society CHRIST University',
+    alternateName: 'IEEE CS CU',
+    url: 'https://ieee-cs-cu.vercel.app',
+    logo: 'https://ieee-cs-cu.vercel.app/assets/ieee_cs_cu.png',
+    description: 'The official IEEE Computer Society Student Branch Chapter of CHRIST (Deemed to be University), Bangalore.',
+  };
+
   return (
     <html
       lang="en"
@@ -50,6 +60,10 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <Providers>
           <ThemeProvider
             attribute="class"
