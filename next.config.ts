@@ -11,6 +11,14 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "res.cloudinary.com",
       },
+      {
+        protocol: "http",
+        hostname: "edu.ieee.org",
+      },
+      {
+        protocol: "https",
+        hostname: "edu.ieee.org",
+      },
     ],
   },
 };
