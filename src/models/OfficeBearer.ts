@@ -47,4 +47,6 @@ const OfficeBearerSchema = new mongoose.Schema<IOfficeBearer>(
   }
 );
 
+OfficeBearerSchema.index({ year: -1, order: 1 });
+
 export default mongoose.models.OfficeBearer || mongoose.model<IOfficeBearer>("OfficeBearer", OfficeBearerSchema);

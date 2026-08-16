@@ -30,11 +30,11 @@ export default function Navigation() {
   }, [pathname]);
 
   const navLinks = [
-    { name: 'Team', path: '/team' },
     { name: 'Hackathons', path: '/hackathons' },
     { name: 'Conferences', path: '/conferences' },
     { name: 'Workshops', path: '/workshops' },
     { name: 'Technical Talks', path: '/technical-talks' },
+    { name: 'Team', path: '/team' },
   ];
 
   return (
@@ -58,6 +58,7 @@ export default function Navigation() {
                     width={24}
                     height={24}
                     className="object-contain"
+                    priority
                   />
                 </div>
                 <span className="font-bold text-lg tracking-tight text-slate-900 dark:text-white hidden sm:block">

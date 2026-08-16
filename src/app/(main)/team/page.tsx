@@ -77,7 +77,7 @@ export default async function OfficeBearersPage({ searchParams }: { searchParams
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {bearers.map((bearer: any) => (
+            {bearers.map((bearer: any, index: number) => (
               <div key={bearer._id} className="group bg-white dark:bg-slate-900 rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl border border-slate-100 dark:border-slate-800 transition-all duration-300 hover:-translate-y-2 flex flex-col">
                 <div className="relative w-full aspect-square bg-slate-100 dark:bg-slate-800">
                   {bearer.imageUrl ? (
@@ -87,6 +87,7 @@ export default async function OfficeBearersPage({ searchParams }: { searchParams
                       fill 
                       className="object-cover" 
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      priority={index < 4}
                     />
                   ) : (
                     <div className="absolute inset-0 flex items-center justify-center text-slate-300 dark:text-slate-700">
