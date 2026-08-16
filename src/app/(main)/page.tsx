@@ -4,6 +4,7 @@ import Event from "@/models/Event";
 import EventCard, { EventData } from "@/components/EventCard";
 import Link from "next/link";
 import Image from "next/image";
+import { FadeIn } from "@/components/MotionWrapper";
 
 export default async function Home() {
   let latestEvents: EventData[] = [];
@@ -31,7 +32,7 @@ export default async function Home() {
           </div>
 
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row items-center gap-16 w-full">
-            <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left pt-20 lg:pt-0">
+            <FadeIn delay={0.1} className="w-full lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left pt-20 lg:pt-0">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-ieee-primary/10 border border-ieee-primary/20 backdrop-blur-md mb-8 shadow-sm">
                 <span className="flex h-2.5 w-2.5 rounded-full bg-ieee-primary animate-pulse"></span>
                 <span className="text-sm font-semibold text-ieee-secondary dark:text-ieee-primary tracking-wide uppercase">
@@ -66,9 +67,9 @@ export default async function Home() {
                   </span>
                 </a>
               </div>
-            </div>
+            </FadeIn>
 
-            <div className="w-full lg:w-1/2 relative hidden md:block mt-12 lg:mt-0">
+            <FadeIn delay={0.3} direction="left" className="w-full lg:w-1/2 relative hidden md:block mt-12 lg:mt-0">
               <div className="relative w-full aspect-square max-w-[600px] mx-auto">
                 <div className="absolute inset-0 border-[1px] border-ieee-primary/20 dark:border-ieee-primary/30 rounded-full animate-[spin_40s_linear_infinite]" />
                 <div className="absolute inset-8 border-[1px] border-dashed border-ieee-secondary/30 rounded-full animate-[spin_30s_linear_infinite_reverse]" />
@@ -93,15 +94,15 @@ export default async function Home() {
                   <Image src="/assets/ieee_cs_cu.png" alt="IEEE CS CU Logo" width={100} height={100} className="object-contain drop-shadow-2xl brightness-0 invert" />
                 </div>
               </div>
-            </div>
+            </FadeIn>
           </div>
         </section>
 
         {/* ABOUT US SECTION */}
-        <section className="py-24 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800">
+        <section className="py-24 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 overflow-hidden">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-              <div>
+              <FadeIn direction="right" className="relative z-10">
                 <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-6">
                   Empowering the <span className="text-ieee-primary">Next Generation</span> of Engineers
                 </h2>
@@ -120,8 +121,8 @@ export default async function Home() {
                     <p className="text-sm text-slate-500 dark:text-slate-400">A growing network of driven students.</p>
                   </div>
                 </div>
-              </div>
-              <div className="relative">
+              </FadeIn>
+              <FadeIn delay={0.2} direction="left" className="relative">
                 <div className="aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl relative border border-slate-200 dark:border-slate-700">
                   <Image src="/assets/adcis.png" alt="Students collaborating" fill className="object-cover" sizes="(max-width: 1024px) 100vw, 50vw" priority />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent flex items-end p-8">
@@ -133,71 +134,79 @@ export default async function Home() {
                 </div>
                 <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-ieee-secondary/20 rounded-full blur-2xl"></div>
                 <div className="absolute -top-6 -right-6 w-32 h-32 bg-ieee-primary/20 rounded-full blur-2xl"></div>
-              </div>
+              </FadeIn>
             </div>
           </div>
         </section>
 
         {/* CORE PILLARS (WHAT WE DO) */}
-        <section className="py-24 bg-slate-50 dark:bg-[#0a0f1c]">
+        <section className="py-24 bg-slate-50 dark:bg-[#0a0f1c] overflow-hidden">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-3xl mx-auto mb-16">
+            <FadeIn direction="up" className="text-center max-w-3xl mx-auto mb-16">
               <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-4">
                 What We Do
               </h2>
               <p className="text-lg text-slate-600 dark:text-slate-400">
                 Our core pillars are designed to provide members with holistic growth, networking opportunities, and practical experience.
               </p>
-            </div>
+            </FadeIn>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {/* Pillar 1 */}
-              <Link href="/hackathons" className="group bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 dark:border-slate-700 hover:-translate-y-2 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-ieee-primary/5 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-150"></div>
-                <div className="w-14 h-14 rounded-xl bg-ieee-primary/10 flex items-center justify-center mb-6 text-ieee-primary relative z-10">
-                  <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
-                </div>
-                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3 relative z-10">Hackathons</h3>
-                <p className="text-slate-500 dark:text-slate-400 relative z-10">Intense 24-48 hour coding marathons to prototype solutions to real-world problems.</p>
-              </Link>
+              <FadeIn delay={0.1} direction="up">
+                <Link href="/hackathons" className="group block bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 dark:border-slate-700 hover:-translate-y-2 relative overflow-hidden h-full">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-ieee-primary/5 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-150"></div>
+                  <div className="w-14 h-14 rounded-xl bg-ieee-primary/10 flex items-center justify-center mb-6 text-ieee-primary relative z-10">
+                    <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                  </div>
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3 relative z-10">Hackathons</h3>
+                  <p className="text-slate-500 dark:text-slate-400 relative z-10">Intense 24-48 hour coding marathons to prototype solutions to real-world problems.</p>
+                </Link>
+              </FadeIn>
 
               {/* Pillar 2 */}
-              <Link href="/conferences" className="group bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 dark:border-slate-700 hover:-translate-y-2 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-purple-500/5 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-150"></div>
-                <div className="w-14 h-14 rounded-xl bg-purple-500/10 flex items-center justify-center mb-6 text-purple-500 relative z-10">
-                  <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                </div>
-                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3 relative z-10">Conferences</h3>
-                <p className="text-slate-500 dark:text-slate-400 relative z-10">Gatherings of students, researchers, and professionals to discuss emerging tech trends.</p>
-              </Link>
+              <FadeIn delay={0.2} direction="up">
+                <Link href="/conferences" className="group block bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 dark:border-slate-700 hover:-translate-y-2 relative overflow-hidden h-full">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-purple-500/5 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-150"></div>
+                  <div className="w-14 h-14 rounded-xl bg-purple-500/10 flex items-center justify-center mb-6 text-purple-500 relative z-10">
+                    <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                  </div>
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3 relative z-10">Conferences</h3>
+                  <p className="text-slate-500 dark:text-slate-400 relative z-10">Gatherings of students, researchers, and professionals to discuss emerging tech trends.</p>
+                </Link>
+              </FadeIn>
 
               {/* Pillar 3 */}
-              <Link href="/workshops" className="group bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 dark:border-slate-700 hover:-translate-y-2 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-ieee-yellow/5 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-150"></div>
-                <div className="w-14 h-14 rounded-xl bg-ieee-yellow/10 flex items-center justify-center mb-6 text-yellow-600 dark:text-ieee-yellow relative z-10">
-                  <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
-                </div>
-                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3 relative z-10">Workshops</h3>
-                <p className="text-slate-500 dark:text-slate-400 relative z-10">Interactive, hands-on sessions to learn specific frameworks, languages, or tools.</p>
-              </Link>
+              <FadeIn delay={0.3} direction="up">
+                <Link href="/workshops" className="group block bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 dark:border-slate-700 hover:-translate-y-2 relative overflow-hidden h-full">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-ieee-yellow/5 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-150"></div>
+                  <div className="w-14 h-14 rounded-xl bg-ieee-yellow/10 flex items-center justify-center mb-6 text-yellow-600 dark:text-ieee-yellow relative z-10">
+                    <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+                  </div>
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3 relative z-10">Workshops</h3>
+                  <p className="text-slate-500 dark:text-slate-400 relative z-10">Interactive, hands-on sessions to learn specific frameworks, languages, or tools.</p>
+                </Link>
+              </FadeIn>
 
               {/* Pillar 4 */}
-              <Link href="/technical-talks" className="group bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 dark:border-slate-700 hover:-translate-y-2 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-ieee-secondary/5 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-150"></div>
-                <div className="w-14 h-14 rounded-xl bg-ieee-secondary/10 flex items-center justify-center mb-6 text-ieee-secondary relative z-10">
-                  <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>
-                </div>
-                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3 relative z-10">Tech Talks</h3>
-                <p className="text-slate-500 dark:text-slate-400 relative z-10">Insights and experiences shared by industry veterans and cutting-edge researchers.</p>
-              </Link>
+              <FadeIn delay={0.4} direction="up">
+                <Link href="/technical-talks" className="group block bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 dark:border-slate-700 hover:-translate-y-2 relative overflow-hidden h-full">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-ieee-secondary/5 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-150"></div>
+                  <div className="w-14 h-14 rounded-xl bg-ieee-secondary/10 flex items-center justify-center mb-6 text-ieee-secondary relative z-10">
+                    <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>
+                  </div>
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3 relative z-10">Tech Talks</h3>
+                  <p className="text-slate-500 dark:text-slate-400 relative z-10">Insights and experiences shared by industry veterans and cutting-edge researchers.</p>
+                </Link>
+              </FadeIn>
             </div>
           </div>
         </section>
 
         {/* LATEST EVENTS SECTION */}
-        <section className="py-24 relative bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800">
+        <section className="py-24 relative bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 overflow-hidden">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col sm:flex-row items-end justify-between mb-16 gap-6">
+            <FadeIn direction="up" className="flex flex-col sm:flex-row items-end justify-between mb-16 gap-6">
               <div>
                 <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                   Upcoming <span className="text-ieee-primary">Activities</span>
@@ -210,22 +219,24 @@ export default async function Home() {
                 View Event Calendar
                 <svg className="w-4 h-4 ml-2 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
               </Link>
-            </div>
+            </FadeIn>
             
             {latestEvents.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 xl:gap-12">
-                {latestEvents.map((event) => (
-                  <EventCard key={event._id || event.title} event={event} />
+                {latestEvents.map((event, i) => (
+                  <FadeIn key={event._id || event.title} delay={0.1 * (i + 1)} direction="up">
+                    <EventCard event={event} />
+                  </FadeIn>
                 ))}
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center py-20 px-4 text-center bg-slate-50 dark:bg-slate-800/50 rounded-3xl border border-slate-200 dark:border-slate-700">
+              <FadeIn delay={0.2} direction="up" className="flex flex-col items-center justify-center py-20 px-4 text-center bg-slate-50 dark:bg-slate-800/50 rounded-3xl border border-slate-200 dark:border-slate-700">
                 <div className="w-16 h-16 mb-4 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
                   <svg className="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                 </div>
                 <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">No upcoming events</h3>
                 <p className="text-slate-500 dark:text-slate-400">Our team is busy planning the next big thing. Check back soon!</p>
-              </div>
+              </FadeIn>
             )}
           </div>
         </section>
@@ -236,7 +247,7 @@ export default async function Home() {
           <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-ieee-primary/20 rounded-full blur-3xl"></div>
           <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-96 h-96 bg-ieee-secondary/20 rounded-full blur-3xl"></div>
           
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+          <FadeIn direction="up" className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
             <h2 className="text-4xl sm:text-5xl font-black text-white tracking-tight mb-6">
               Ready to Shape the Future?
             </h2>
@@ -259,7 +270,7 @@ export default async function Home() {
                 Contact Us
               </a>
             </div>
-          </div>
+          </FadeIn>
         </section>
 
       </div>
