@@ -3,11 +3,33 @@ import Event from "@/models/Event";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { Metadata } from "next";
 
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  try {
+    await connectDB();
+    const { id } = await params;
+    const rawEvent = await Event.findById(id).lean();
+    if (rawEvent) {
+      return {
+        title: rawEvent.title,
+        description: rawEvent.description?.substring(0, 150) + "...",
+        openGraph: {
+          title: rawEvent.title,
+          description: rawEvent.description?.substring(0, 150) + "...",
+          images: rawEvent.imageUrl ? [rawEvent.imageUrl] : [],
+        },
+      };
+    }
+  } catch (error) {}
+  
+  return { title: "Event Details" };
+}
 
 export default async function EventDetails({ params }: { params: Promise<{ id: string }> }) {
   // If the id isn't a valid MongoDB ObjectId, Mongoose might throw an error.

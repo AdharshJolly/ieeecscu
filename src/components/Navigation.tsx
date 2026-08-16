@@ -103,7 +103,9 @@ export default function Navigation() {
               )}
 
               <a
-                href="#"
+                href="https://www.ieee.org/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="hidden sm:inline-flex bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-5 py-2 rounded-full text-sm font-bold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
               >
                 Join Us
@@ -157,7 +159,9 @@ export default function Navigation() {
               })}
               <div className="pt-4 mt-2 border-t border-slate-100 dark:border-slate-800">
                 <a
-                  href="#"
+                  href="https://www.ieee.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="block w-full text-center bg-ieee-primary text-white px-5 py-3 rounded-xl text-base font-bold shadow-md"
                 >
                   Join Us

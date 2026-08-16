@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { toast } from "sonner";
+import ConfirmModal from "@/components/ConfirmModal";
 
 export default function AdminUsers() {
   const router = useRouter();
@@ -14,6 +16,11 @@ export default function AdminUsers() {
   const [formData, setFormData] = useState({
     name: "", email: "", password: "", role: "ADMIN"
   });
+
+  // Custom Delete Modal State
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     if (status === "unauthenticated" || (session?.user as any)?.role !== "SUPER_ADMIN") {
@@ -68,31 +75,39 @@ export default function AdminUsers() {
     });
 
     if (res.ok) {
+      toast.success(`User ${editingId ? "updated" : "invited"} successfully!`);
       setIsModalOpen(false);
       fetchUsers();
     } else {
       const data = await res.json();
-      alert(data.error || "Error saving user");
+      toast.error(data.error || "Error saving user");
     }
   };
 
-  const handleDelete = async (id: string, email: string) => {
+  const handleDeleteClick = (id: string, email: string) => {
     if ((session?.user as any)?.email === email) {
-      alert("You cannot delete yourself!");
+      toast.error("You cannot delete yourself!");
       return;
     }
-    
-    if (confirm("Are you sure you want to revoke access and delete this user?")) {
-      const res = await fetch(`/api/users/${id}`, { method: "DELETE" });
-      if (res.ok) {
-        fetchUsers();
-      }
-    }
+    setItemToDelete(id);
+    setDeleteModalOpen(true);
   };
 
-  if (status === "loading" || loading) {
-    return <div className="p-8 text-center text-slate-500">Loading users...</div>;
-  }
+  const confirmDelete = async () => {
+    if (!itemToDelete) return;
+    setIsDeleting(true);
+    const res = await fetch(`/api/users/${itemToDelete}`, { method: "DELETE" });
+    setIsDeleting(false);
+    setDeleteModalOpen(false);
+    setItemToDelete(null);
+
+    if (res.ok) {
+      toast.success("User deleted successfully!");
+      fetchUsers();
+    } else {
+      toast.error("Failed to delete user.");
+    }
+  };
 
   return (
     <div>
@@ -124,7 +139,26 @@ export default function AdminUsers() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-700/50">
-              {users.map(user => (
+              {(status === "loading" || loading) ? (
+                [...Array(3)].map((_, i) => (
+                  <tr key={i} className="animate-pulse">
+                    <td className="px-6 py-4"><div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-3/4"></div></td>
+                    <td className="px-6 py-4"><div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-1/2"></div></td>
+                    <td className="px-6 py-4"><div className="h-6 bg-slate-200 dark:bg-slate-700 rounded-full w-24"></div></td>
+                    <td className="px-6 py-4 text-right"><div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-16 ml-auto"></div></td>
+                  </tr>
+                ))
+              ) : users.length === 0 ? (
+                <tr>
+                  <td colSpan={4} className="p-16 text-center">
+                    <div className="w-20 h-20 mx-auto bg-slate-100 dark:bg-slate-700 rounded-full flex items-center justify-center mb-4">
+                      <svg className="w-10 h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                    </div>
+                    <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">No users found</h3>
+                    <p className="text-slate-500 dark:text-slate-400">Click the "Invite Admin" button to add users.</p>
+                  </td>
+                </tr>
+              ) : users.map(user => (
                 <tr key={user._id} className="hover:bg-slate-50 dark:hover:bg-slate-700/20 transition-colors">
                   <td className="px-6 py-4 font-bold text-slate-900 dark:text-white">{user.name}</td>
                   <td className="px-6 py-4 text-slate-500 dark:text-slate-400">{user.email}</td>
@@ -136,7 +170,7 @@ export default function AdminUsers() {
                   <td className="px-6 py-4 text-right space-x-3">
                     <button onClick={() => openModal(user)} className="text-ieee-primary hover:text-ieee-secondary font-semibold">Edit</button>
                     {(session?.user as any)?.email !== user.email && (
-                      <button onClick={() => handleDelete(user._id, user.email)} className="text-red-500 hover:text-red-700 font-semibold">Delete</button>
+                      <button onClick={() => handleDeleteClick(user._id, user.email)} className="text-red-500 hover:text-red-700 font-semibold">Delete</button>
                     )}
                   </td>
                 </tr>
@@ -187,6 +221,18 @@ export default function AdminUsers() {
           </div>
         </div>
       )}
+
+      <ConfirmModal
+        isOpen={deleteModalOpen}
+        title="Delete User"
+        message="Are you sure you want to revoke access and delete this user? This action cannot be undone."
+        onConfirm={confirmDelete}
+        onCancel={() => {
+          setDeleteModalOpen(false);
+          setItemToDelete(null);
+        }}
+        isLoading={isDeleting}
+      />
     </div>
   );
 }

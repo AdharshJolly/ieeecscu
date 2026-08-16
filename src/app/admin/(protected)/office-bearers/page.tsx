@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import ConfirmModal from "@/components/ConfirmModal";
 
 export default function AdminOfficeBearers() {
   const router = useRouter();
@@ -18,6 +20,11 @@ export default function AdminOfficeBearers() {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
+
+  // Custom Delete Modal State
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // Derive unique years from bearers (plus current selection)
   const allYears = Array.from(new Set([...bearers.map(b => b.year), "2023-2024", "2024-2025"])).sort().reverse();
@@ -71,7 +78,7 @@ export default function AdminOfficeBearers() {
         const result = await uploadRes.json();
         finalImageUrl = result.url;
       } else {
-        alert("Image upload failed");
+        toast.error("Image upload failed");
         setUploading(false);
         return;
       }
@@ -89,6 +96,7 @@ export default function AdminOfficeBearers() {
     setUploading(false);
 
     if (res.ok) {
+      toast.success(`Office Bearer ${editingId ? "updated" : "added"} successfully!`);
       setIsModalOpen(false);
       // Auto-switch to the year they just created/edited in case they changed it
       if (formData.year !== selectedYear) {
@@ -98,17 +106,29 @@ export default function AdminOfficeBearers() {
       }
       router.refresh();
     } else {
-      alert("Error saving office bearer");
+      toast.error("Error saving office bearer");
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (confirm("Are you sure you want to delete this office bearer?")) {
-      const res = await fetch(`/api/office-bearers/${id}`, { method: "DELETE" });
-      if (res.ok) {
-        fetchBearers(selectedYear);
-        router.refresh();
-      }
+  const handleDeleteClick = (id: string) => {
+    setItemToDelete(id);
+    setDeleteModalOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!itemToDelete) return;
+    setIsDeleting(true);
+    const res = await fetch(`/api/office-bearers/${itemToDelete}`, { method: "DELETE" });
+    setIsDeleting(false);
+    setDeleteModalOpen(false);
+    setItemToDelete(null);
+
+    if (res.ok) {
+      toast.success("Office Bearer deleted successfully!");
+      fetchBearers(selectedYear);
+      router.refresh();
+    } else {
+      toast.error("Failed to delete office bearer.");
     }
   };
 
@@ -152,7 +172,14 @@ export default function AdminOfficeBearers() {
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-700/50">
               {loading ? (
-                <tr><td colSpan={4} className="p-8 text-center text-slate-500">Loading office bearers...</td></tr>
+                [...Array(3)].map((_, i) => (
+                  <tr key={i} className="animate-pulse">
+                    <td className="px-6 py-4"><div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-3/4"></div></td>
+                    <td className="px-6 py-4"><div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-1/2"></div></td>
+                    <td className="px-6 py-4"><div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-8"></div></td>
+                    <td className="px-6 py-4 text-right"><div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-16 ml-auto"></div></td>
+                  </tr>
+                ))
               ) : bearers.length === 0 ? (
                 <tr><td colSpan={4} className="p-8 text-center text-slate-500">No office bearers found for {selectedYear}.</td></tr>
               ) : bearers.map(bearer => (
@@ -176,7 +203,7 @@ export default function AdminOfficeBearers() {
                   <td className="px-6 py-4 text-slate-500 dark:text-slate-400">{bearer.order}</td>
                   <td className="px-6 py-4 text-right space-x-3">
                     <button onClick={() => openModal(bearer)} className="text-ieee-primary hover:text-ieee-secondary font-semibold">Edit</button>
-                    <button onClick={() => handleDelete(bearer._id)} className="text-red-500 hover:text-red-700 font-semibold">Delete</button>
+                    <button onClick={() => handleDeleteClick(bearer._id)} className="text-red-500 hover:text-red-700 font-semibold">Delete</button>
                   </td>
                 </tr>
               ))}
@@ -258,6 +285,18 @@ export default function AdminOfficeBearers() {
           </div>
         </div>
       )}
+
+      <ConfirmModal
+        isOpen={deleteModalOpen}
+        title="Delete Office Bearer"
+        message="Are you sure you want to delete this office bearer? This action cannot be undone."
+        onConfirm={confirmDelete}
+        onCancel={() => {
+          setDeleteModalOpen(false);
+          setItemToDelete(null);
+        }}
+        isLoading={isDeleting}
+      />
     </div>
   );
 }
