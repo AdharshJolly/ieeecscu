@@ -27,8 +27,25 @@ export default function AdminOfficeBearers() {
   const [itemToDelete, setItemToDelete] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  // Derive unique years from bearers (plus current selection)
-  const allYears = Array.from(new Set([...bearers.map(b => b.year), "2023-2024", "2024-2025"])).sort().reverse();
+  const [allYears, setAllYears] = useState<string[]>([]);
+
+  const fetchYears = async () => {
+    const res = await fetch("/api/office-bearers/years");
+    if (res.ok) {
+      const years = await res.json();
+      if (Array.isArray(years) && years.length > 0) {
+        const uniqueYears = Array.from(new Set(years)).sort().reverse() as string[];
+        setAllYears(uniqueYears);
+        
+        setSelectedYear(prev => {
+          if (!uniqueYears.includes(prev)) {
+            return uniqueYears[0];
+          }
+          return prev;
+        });
+      }
+    }
+  };
 
   const fetchBearers = async (year: string) => {
     setLoading(true);
@@ -38,6 +55,10 @@ export default function AdminOfficeBearers() {
     }
     setLoading(false);
   };
+
+  useEffect(() => {
+    fetchYears();
+  }, []);
 
   useEffect(() => {
     fetchBearers(selectedYear);
@@ -102,6 +123,7 @@ export default function AdminOfficeBearers() {
       // Auto-switch to the year they just created/edited in case they changed it
       if (formData.year !== selectedYear) {
         setSelectedYear(formData.year);
+        fetchYears();
       } else {
         fetchBearers(selectedYear);
       }

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
@@ -17,20 +18,37 @@ export default function AdminSidebar({ userRole }: { userRole: string }) {
     links.push({ name: "Users", path: "/admin/users", icon: "M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" });
   }
 
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
+
   return (
-    <aside className="w-full md:w-64 bg-slate-900 text-slate-300 md:min-h-screen flex flex-col transition-all duration-300 md:border-r border-b md:border-b-0 border-slate-800">
-      <div className="h-16 flex items-center px-4 md:px-6 bg-slate-950 border-b border-slate-800 shrink-0">
+    <aside className="w-full md:w-64 bg-slate-900 text-slate-300 md:h-screen sticky top-0 z-50 flex flex-col transition-all duration-300 border-b md:border-b-0 md:border-r border-slate-800 shrink-0">
+      <div className="h-16 flex justify-between items-center px-4 md:px-6 bg-slate-950 border-b border-slate-800 shrink-0">
         <span className="text-xl font-black text-white tracking-tight">IEEE CS <span className="text-ieee-primary">Admin</span></span>
+        
+        {/* Hamburger for mobile */}
+        <button 
+          onClick={() => setIsMobileOpen(!isMobileOpen)}
+          className="md:hidden p-2 text-slate-400 hover:text-white focus:outline-none"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            {isMobileOpen ? (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            ) : (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            )}
+          </svg>
+        </button>
       </div>
       
-      <div className="p-2 md:p-4 flex-grow flex md:flex-col flex-row overflow-x-auto md:overflow-x-visible gap-2 mt-0 md:mt-4 no-scrollbar">
+      <div className={`${isMobileOpen ? 'flex' : 'hidden'} md:flex flex-col flex-grow overflow-y-auto p-4 gap-2 no-scrollbar bg-slate-900 absolute md:static top-16 left-0 w-full md:w-auto h-[calc(100vh-4rem)] md:h-auto z-40`}>
         {links.map((link) => {
           const isActive = pathname.startsWith(link.path);
           return (
             <Link 
               key={link.name} 
               href={link.path}
-              className={`flex items-center gap-2 md:gap-3 px-4 py-2 md:py-3 rounded-xl transition-all duration-200 font-medium whitespace-nowrap ${isActive ? 'bg-ieee-primary/10 text-ieee-primary' : 'hover:bg-slate-800 hover:text-white'}`}
+              onClick={() => setIsMobileOpen(false)}
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 font-medium ${isActive ? 'bg-ieee-primary/10 text-ieee-primary' : 'hover:bg-slate-800 hover:text-white'}`}
             >
               <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={isActive ? 2.5 : 2} d={link.icon} />
@@ -39,18 +57,18 @@ export default function AdminSidebar({ userRole }: { userRole: string }) {
             </Link>
           );
         })}
-      </div>
-
-      <div className="p-2 md:p-4 border-t border-slate-800 hidden md:block">
-        <button 
-          onClick={() => signOut({ callbackUrl: "/admin/login" })}
-          className="w-full flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-red-400 hover:bg-red-400/10 rounded-xl transition-all duration-200 font-medium"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-          </svg>
-          Sign Out
-        </button>
+        
+        <div className="mt-auto pt-4 border-t border-slate-800">
+          <button 
+            onClick={() => signOut({ callbackUrl: "/admin/login" })}
+            className="w-full flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-red-400 hover:bg-red-400/10 rounded-xl transition-all duration-200 font-medium"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+            Sign Out
+          </button>
+        </div>
       </div>
     </aside>
   );
