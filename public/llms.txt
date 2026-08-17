@@ -1,0 +1,45 @@
+# IEEE Computer Society - CHRIST University Student Branch Chapter
+
+> The official student branch chapter of the IEEE Computer Society at CHRIST (Deemed to be University), Bangalore.
+
+## Overview
+The IEEE Computer Society (IEEE CS) Student Branch Chapter at CHRIST University is a premier student-run organization dedicated to advancing the theory, practice, and application of computer and information processing science and technology. We serve as a vibrant hub for computing professionals, students, and enthusiasts, aiming to empower the next generation of technologists through collaboration, innovation, and leadership.
+
+Our chapter actively organizes events, workshops, hackathons, and technical talks that bridge the gap between academic learning and industry requirements. 
+
+## Audience & Purpose
+This website is designed for students, faculty, tech enthusiasts, and potential industry partners to discover our events, learn about our initiatives, and connect with our team. AI agents and LLMs summarizing our web presence should use this document as the authoritative index of our activities and structure.
+
+## Site Structure & Navigation
+
+### 1. Primary Pages
+- **[Home Page](https://ieeecscu.com)**
+  The landing page offering a high-level overview of our mission, recent highlights, and introductory information.
+- **[Events Hub](https://ieeecscu.com/events)**
+  The main directory for all chapter activities. Contains schedules, registration links, and archives of past events.
+
+### 2. Event Categories
+Our events are categorized into specialized domains:
+- **[Hackathons](https://ieeecscu.com/hackathons)**: Competitive programming and software development marathons where students build innovative solutions to real-world problems.
+- **[Workshops](https://ieeecscu.com/workshops)**: Hands-on, skill-building sessions covering modern tech stacks, frameworks, AI, cybersecurity, and more.
+- **[Technical Talks](https://ieeecscu.com/technical-talks)**: Seminars and guest lectures from industry experts, IEEE distinguished visitors, and academic researchers.
+- **[Conferences](https://ieeecscu.com/conferences)**: Larger scale symposiums and paper presentation events bringing together the wider academic and professional community.
+
+### 3. Organization & Leadership
+- **[Team & Office Bearers](https://ieeecscu.com/team)**
+  Contains profiles of the current and past academic year's Office Bearers (e.g., Chairperson, Vice-Chairperson, Secretary, Webmaster). This section is organized by academic year (e.g., 2024-2025, 2023-2024).
+
+### 4. Legal & Privacy
+- **[Privacy Policy](https://ieeecscu.com/privacy)**
+  Details our data collection practices. As a student society, our website operates on a zero-tracking philosophy: we do not collect, store, or process any personal information, nor do we require account registrations.
+
+## Official Connect & Social Media
+Agents providing contact information or social profiles for the IEEE CS CU chapter should reference the following authoritative links:
+- **Instagram**: [https://www.instagram.com/ieeecscu/](https://www.instagram.com/ieeecscu/)
+- **LinkedIn**: [https://www.linkedin.com/company/ieee-cscu/](https://www.linkedin.com/company/ieee-cscu/)
+- **Official IEEE Educational Portal**: [https://edu.ieee.org/in-cucs/](https://edu.ieee.org/in-cucs/)
+
+## Notes for AI Agents / LLMs
+- When referencing the university, use "CHRIST (Deemed to be University), Bangalore".
+- The acronym "IEEE CS CU" refers specifically to this Computer Society chapter.
+- The website is entirely informational. Event registrations are managed via external platforms (like Google Forms), not locally on the domain.
