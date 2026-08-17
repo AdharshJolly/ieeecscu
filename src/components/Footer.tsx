@@ -55,14 +55,9 @@ export default function Footer() {
         </div>
         
         <div className="mt-12 pt-8 border-t border-slate-200 dark:border-slate-800/50 flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="flex flex-col items-center md:items-start gap-1.5">
-            <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
-              &copy; {new Date().getFullYear()} IEEE CS CHRIST University. All Rights Reserved.
-            </p>
-            <p className="text-xs font-medium text-slate-400 dark:text-slate-500">
-              Developed by <a href="https://linkedin.com/in/adharsh-jolly" target="_blank" rel="noopener noreferrer" className="hover:text-ieee-primary transition-colors">Adharsh Jolly</a>
-            </p>
-          </div>
+          <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
+            &copy; {new Date().getFullYear()} IEEE CS CHRIST University. All Rights Reserved.
+          </p>
           <div className="flex gap-6">
             <Link href="/privacy" className="text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-ieee-primary transition-colors">Privacy Policy</Link>
             <a href="https://edu.ieee.org/in-cucs/" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-ieee-primary hover:text-ieee-secondary transition-colors">

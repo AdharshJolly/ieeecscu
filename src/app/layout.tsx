@@ -54,6 +54,12 @@ export default function RootLayout({
     url: 'https://ieeecscu.com',
     logo: 'https://ieeecscu.com/assets/ieee_cs_cu.png',
     description: 'The official IEEE Computer Society Student Branch Chapter of CHRIST (Deemed to be University), Bangalore.',
+    maintainer: {
+      '@type': 'Person',
+      name: 'Adharsh Jolly',
+      url: 'https://linkedin.com/in/adharsh-jolly',
+      sameAs: ['https://github.com/AdharshJolly']
+    }
   };
 
   return (
