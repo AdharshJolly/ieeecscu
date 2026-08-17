@@ -22,6 +22,8 @@ export const metadata: Metadata = {
   },
   description: "The official IEEE Computer Society Student Branch Chapter of CHRIST (Deemed to be University), Bangalore. We host hackathons, workshops, and tech talks.",
   keywords: ["IEEE", "Computer Society", "CHRIST University", "Student Branch", "Bangalore", "Hackathons", "Tech Talks", "Workshops", "Tech Community"],
+  authors: [{ name: "Adharsh Jolly", url: "https://linkedin.com/in/adharsh-jolly" }],
+  creator: "Adharsh Jolly",
   openGraph: {
     title: "IEEE CS CHRIST University",
     description: "The official IEEE Computer Society Student Branch Chapter of CHRIST (Deemed to be University), Bangalore.",
