@@ -10,14 +10,11 @@ export async function GET() {
   try {
     await connectDB();
 
-    // Fetch the 10 most recent events
-    const recentEvents = await Event.find().sort({ date: -1 }).limit(10).lean();
+    // Fetch ALL events
+    const allEvents = await Event.find().sort({ date: -1 }).lean();
 
-    // Fetch current office bearers (most recent year)
-    const allYears = await OfficeBearer.distinct('year');
-    allYears.sort().reverse();
-    const currentYear = allYears.length > 0 ? allYears[0] : '2024-2025';
-    const bearers = await OfficeBearer.find({ year: currentYear }).sort({ order: 1 }).lean();
+    // Fetch ALL office bearers and sort by year (descending) and order (ascending)
+    const allBearers = await OfficeBearer.find().sort({ year: -1, order: 1 }).lean();
 
     let md = `# IEEE Computer Society - CHRIST University Student Branch Chapter\n\n`;
     md += `> The official student branch chapter of the IEEE Computer Society at CHRIST (Deemed to be University), Bangalore.\n\n`;
@@ -25,11 +22,10 @@ export async function GET() {
     md += `## Overview\n`;
     md += `The IEEE Computer Society (IEEE CS) Student Branch Chapter at CHRIST University is a premier student-run organization dedicated to advancing the theory, practice, and application of computer and information processing science and technology. We serve as a vibrant hub for computing professionals, students, and enthusiasts, aiming to empower the next generation of technologists through collaboration, innovation, and leadership.\n\n`;
 
-    md += `## Dynamic Information (Auto-updated)\n\n`;
+    md += `## Events\n\n`;
     
-    md += `### Upcoming & Recent Events\n`;
-    if (recentEvents && recentEvents.length > 0) {
-      recentEvents.forEach((e: any) => {
+    if (allEvents && allEvents.length > 0) {
+      allEvents.forEach((e: any) => {
         const dateStr = new Date(e.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
         md += `- **${e.title}** (${dateStr}) - [${(e.type || 'Event').toUpperCase()}]\n`;
         if (e.description) md += `  ${e.description.replace(/\n/g, ' ')}\n`;
@@ -38,18 +34,23 @@ export async function GET() {
         md += `\n`;
       });
     } else {
-      md += `No recent events available.\n\n`;
+      md += `No events available.\n\n`;
     }
 
-    md += `### Current Office Bearers (${currentYear})\n`;
-    if (bearers && bearers.length > 0) {
-      bearers.forEach((b: any) => {
+    md += `## Office Bearers\n`;
+    if (allBearers && allBearers.length > 0) {
+      let currentYearPrinted = "";
+      allBearers.forEach((b: any) => {
+        if (b.year !== currentYearPrinted) {
+          md += `\n### Academic Year ${b.year}\n`;
+          currentYearPrinted = b.year;
+        }
         md += `- **${b.name}** - ${b.role}\n`;
         if (b.linkedinUrl) md += `  [LinkedIn](${b.linkedinUrl})\n`;
         if (b.githubUrl) md += `  [GitHub](${b.githubUrl})\n`;
       });
     } else {
-      md += `No office bearers found for the current academic year.\n`;
+      md += `No office bearers found.\n`;
     }
     md += `\n`;
 
