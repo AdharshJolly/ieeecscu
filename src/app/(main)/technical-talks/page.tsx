@@ -1,7 +1,15 @@
-import Head from "next/head";
+import { Metadata } from "next";
 import connectDB from "@/lib/db";
 import Event from "@/models/Event";
 import EventListClient from "@/components/EventListClient";
+
+export const metadata: Metadata = {
+  title: "Technical Talks",
+  description: "Join insightful sessions featuring industry veterans and cutting-edge researchers sharing their knowledge and experiences.",
+  alternates: {
+    canonical: "/technical-talks",
+  },
+};
 
 export const dynamic = "force-dynamic";
 
@@ -12,9 +20,6 @@ export default async function TechnicalTalks() {
 
   return (
     <>
-      <Head>
-        <title>Technical Talks - IEEE CS CU</title>
-      </Head>
       <div className="w-full bg-slate-50 dark:bg-[#0a0f1c] min-h-screen pt-32 pb-24 transition-colors duration-300">
         {/* MINIMALIST SUBPAGE HERO */}
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12 mt-8 pb-10 border-b border-slate-200 dark:border-slate-800">

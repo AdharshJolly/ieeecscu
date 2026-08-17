@@ -15,16 +15,17 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://ieee-cs-cu.vercel.app"),
+  metadataBase: new URL("https://ieeecscu.com"),
   title: {
     template: "%s | IEEE CS CHRIST University",
     default: "IEEE CS CHRIST University",
   },
   description: "The official IEEE Computer Society Student Branch Chapter of CHRIST (Deemed to be University), Bangalore. We host hackathons, workshops, and tech talks.",
+  keywords: ["IEEE", "Computer Society", "CHRIST University", "Student Branch", "Bangalore", "Hackathons", "Tech Talks", "Workshops", "Tech Community"],
   openGraph: {
     title: "IEEE CS CHRIST University",
     description: "The official IEEE Computer Society Student Branch Chapter of CHRIST (Deemed to be University), Bangalore.",
-    url: "https://ieee-cs-cu.vercel.app", // Adjust when deployed
+    url: "https://ieeecscu.com",
     siteName: "IEEE CS CU",
     images: [
       {
@@ -48,8 +49,8 @@ export default function RootLayout({
     '@type': 'EducationalOrganization',
     name: 'IEEE Computer Society CHRIST University',
     alternateName: 'IEEE CS CU',
-    url: 'https://ieee-cs-cu.vercel.app',
-    logo: 'https://ieee-cs-cu.vercel.app/assets/ieee_cs_cu.png',
+    url: 'https://ieeecscu.com',
+    logo: 'https://ieeecscu.com/assets/ieee_cs_cu.png',
     description: 'The official IEEE Computer Society Student Branch Chapter of CHRIST (Deemed to be University), Bangalore.',
   };
 

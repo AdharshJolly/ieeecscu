@@ -1,10 +1,18 @@
-import Head from "next/head";
+import { Metadata } from "next";
 import connectDB from "@/lib/db";
 import Event from "@/models/Event";
 import EventCard, { EventData } from "@/components/EventCard";
 import Link from "next/link";
 import Image from "next/image";
 import { FadeIn } from "@/components/MotionWrapper";
+
+export const metadata: Metadata = {
+  title: "IEEE CS CU Student Branch",
+  description: "A student-driven technical community under IEEE Computer Society, focused on innovation, collaboration, and real-world computing experiences at CHRIST University.",
+  alternates: {
+    canonical: "/",
+  },
+};
 
 export default async function Home() {
   let latestEvents: EventData[] = [];
@@ -18,9 +26,6 @@ export default async function Home() {
 
   return (
     <>
-      <Head>
-        <title>IEEE CS CU Student Branch</title>
-      </Head>
       <div className="w-full bg-white dark:bg-slate-900 transition-colors duration-300">
         
         {/* PREMIUM HERO SECTION */}

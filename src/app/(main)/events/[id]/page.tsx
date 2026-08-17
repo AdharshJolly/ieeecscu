@@ -19,10 +19,14 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       return {
         title: rawEvent.title,
         description: rawEvent.description?.substring(0, 150) + "...",
+        keywords: [rawEvent.title, rawEvent.type, "IEEE", "CHRIST University", "Event"],
         openGraph: {
           title: rawEvent.title,
           description: rawEvent.description?.substring(0, 150) + "...",
           images: rawEvent.imageUrl ? [rawEvent.imageUrl] : [],
+        },
+        alternates: {
+          canonical: `/events/${rawEvent._id}`,
         },
       };
     }
@@ -54,8 +58,38 @@ export default async function EventDetails({ params }: { params: Promise<{ id: s
     weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
   });
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Event',
+    'name': event.title,
+    'startDate': event.date,
+    'endDate': event.date,
+    'eventAttendanceMode': 'https://schema.org/OfflineEventAttendanceMode',
+    'eventStatus': 'https://schema.org/EventScheduled',
+    'location': {
+      '@type': 'Place',
+      'name': event.location || 'CHRIST University',
+      'address': {
+        '@type': 'PostalAddress',
+        'addressLocality': 'Bangalore',
+        'addressCountry': 'IN'
+      }
+    },
+    'image': event.imageUrl ? [`https://ieeecscu.com${event.imageUrl}`] : undefined,
+    'description': event.description || event.title,
+    'organizer': {
+      '@type': 'Organization',
+      'name': 'IEEE CS CHRIST University',
+      'url': 'https://ieeecscu.com'
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-28 pb-12 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="max-w-4xl mx-auto">
         <div className="mb-6">
           <Link href="/hackathons" className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-ieee-primary transition-colors">

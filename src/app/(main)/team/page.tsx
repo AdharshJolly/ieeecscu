@@ -14,10 +14,14 @@ export async function generateMetadata({ searchParams }: { searchParams: Promise
   return {
     title: `Office Bearers ${displayYear} | IEEE CS CU`,
     description: `Meet the dedicated student leaders and faculty who drive the IEEE Computer Society Student Chapter at CHRIST University for the ${displayYear} academic year.`,
+    keywords: ["IEEE", "Computer Society", "CHRIST University", "Office Bearers", "Student Leaders", "Tech Community", displayYear],
     openGraph: {
       title: `Office Bearers ${displayYear} | IEEE CS CU`,
       description: `Meet the dedicated student leaders and faculty who drive the IEEE Computer Society Student Chapter at CHRIST University for the ${displayYear} academic year.`,
-    }
+    },
+    alternates: {
+      canonical: "/team",
+    },
   };
 }
 
@@ -37,8 +41,29 @@ export default async function OfficeBearersPage({ searchParams }: { searchParams
   const rawBearers = await OfficeBearer.find({ year: activeYear }).sort({ order: 1 }).lean();
   const bearers = JSON.parse(JSON.stringify(rawBearers));
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    'itemListElement': bearers.map((bearer: any, index: number) => ({
+      '@type': 'ListItem',
+      'position': index + 1,
+      'item': {
+        '@type': 'Person',
+        'name': bearer.name,
+        'jobTitle': bearer.role,
+        'image': bearer.imageUrl ? `https://ieeecscu.com${bearer.imageUrl}` : undefined,
+        'url': bearer.linkedinUrl || bearer.githubUrl || undefined,
+        'sameAs': [bearer.linkedinUrl, bearer.githubUrl].filter(Boolean)
+      }
+    }))
+  };
+
   return (
     <div className="min-h-screen bg-white dark:bg-[#0a0f1c] pt-32 pb-24 transition-colors duration-300">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
