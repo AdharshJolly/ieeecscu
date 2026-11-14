@@ -1,5 +1,4 @@
-import connectDB from "@/lib/db";
-import Event from "@/models/Event";
+import { getEventById } from "@/lib/data";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,13 +7,10 @@ import { Metadata } from "next";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-export const dynamic = "force-dynamic";
-
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   try {
-    await connectDB();
     const { id } = await params;
-    const rawEvent = await Event.findById(id).lean();
+    const rawEvent = await getEventById(id);
     if (rawEvent) {
       return {
         title: rawEvent.title,
@@ -40,12 +36,8 @@ export default async function EventDetails({ params }: { params: Promise<{ id: s
   // We'll wrap in a try-catch and return a 404 if it fails.
   let event = null;
   try {
-    await connectDB();
     const { id } = await params;
-    const rawEvent = await Event.findById(id).lean();
-    if (rawEvent) {
-      event = JSON.parse(JSON.stringify(rawEvent));
-    }
+    event = await getEventById(id);
   } catch (error) {
     console.error("Invalid ID or DB Error", error);
   }

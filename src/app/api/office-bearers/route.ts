@@ -3,6 +3,8 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import connectDB from "@/lib/db";
 import OfficeBearer from "@/models/OfficeBearer";
+import { revalidateTag } from "next/cache";
+import { BEARERS_TAG } from "@/lib/data";
 
 export async function GET(req: Request) {
   try {
@@ -31,6 +33,7 @@ export async function POST(req: Request) {
     await connectDB();
 
     const newBearer = await OfficeBearer.create(body);
+    revalidateTag(BEARERS_TAG, "max");
     return NextResponse.json(newBearer, { status: 201 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 400 });

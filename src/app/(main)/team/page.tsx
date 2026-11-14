@@ -1,11 +1,8 @@
-import connectDB from "@/lib/db";
-import OfficeBearer from "@/models/OfficeBearer";
+import { getBearerYears, getBearersByYear } from "@/lib/data";
 import Image from "next/image";
 import Link from "next/link";
 
 import { Metadata } from "next";
-
-export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ searchParams }: { searchParams: Promise<{ year?: string }> }): Promise<Metadata> {
   const { year } = await searchParams;
@@ -26,20 +23,15 @@ export async function generateMetadata({ searchParams }: { searchParams: Promise
 }
 
 export default async function OfficeBearersPage({ searchParams }: { searchParams: Promise<{ year?: string }> }) {
-  await connectDB();
-  
   // Find all distinct years to populate the dropdown/tabs
-  const allYears = await OfficeBearer.distinct("year");
-  allYears.sort().reverse(); // Newest first
-  
-  const { year } = await searchParams;
-  
+  const [yearsRaw, { year }] = await Promise.all([getBearerYears(), searchParams]);
+  const allYears = [...yearsRaw].sort().reverse(); // Newest first
+
   // If no year specified in URL, default to the most recent year
   const activeYear = year || (allYears.length > 0 ? allYears[0] : "2024-2025");
   
   // Fetch bearers for the active year
-  const rawBearers = await OfficeBearer.find({ year: activeYear }).sort({ order: 1 }).lean();
-  const bearers = JSON.parse(JSON.stringify(rawBearers));
+  const bearers = await getBearersByYear(activeYear);
 
   const jsonLd = {
     '@context': 'https://schema.org',

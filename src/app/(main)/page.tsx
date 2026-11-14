@@ -1,6 +1,5 @@
 import { Metadata } from "next";
-import connectDB from "@/lib/db";
-import Event from "@/models/Event";
+import { getLatestEvents } from "@/lib/data";
 import EventCard, { EventData } from "@/components/EventCard";
 import Link from "next/link";
 import Image from "next/image";
@@ -17,9 +16,7 @@ export const metadata: Metadata = {
 export default async function Home() {
   let latestEvents: EventData[] = [];
   try {
-    await connectDB();
-    const rawLatestEvents = await Event.find({}).sort({ date: -1 }).limit(3).lean();
-    latestEvents = JSON.parse(JSON.stringify(rawLatestEvents));
+    latestEvents = await getLatestEvents(3);
   } catch (error) {
     console.error("Failed to fetch latest events:", error);
   }

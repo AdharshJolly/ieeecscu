@@ -1,6 +1,5 @@
 import { Metadata } from "next";
-import connectDB from "@/lib/db";
-import Event from "@/models/Event";
+import { getEventsByTypes } from "@/lib/data";
 import EventListClient from "@/components/EventListClient";
 
 export const metadata: Metadata = {
@@ -11,12 +10,9 @@ export const metadata: Metadata = {
   },
 };
 
-export const dynamic = "force-dynamic";
 
 export default async function TechnicalTalks() {
-  await connectDB();
-  const rawEvents = await Event.find({ type: { $in: ["talk", "technical_talk", "webinar"] } }).sort({ date: -1 }).lean();
-  const events = JSON.parse(JSON.stringify(rawEvents));
+  const events = await getEventsByTypes(["talk", "technical_talk", "webinar"]);
 
   return (
     <>
