@@ -10,14 +10,17 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReducedMotion) return;
 
+    // Dampened, heavyweight scrolling configuration
+    // Lower wheelMultiplier and touchMultiplier reduce sensitivity and speed
+    // Longer duration creates smooth, cinematic momentum and deliberate pacing
     const lenis = new Lenis({
-      duration: 1.1,
+      duration: 1.5, // Heavier, smoother momentum dampening (was 1.1)
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: "vertical",
       gestureOrientation: "vertical",
       smoothWheel: true,
-      wheelMultiplier: 1.0,
-      touchMultiplier: 1.5,
+      wheelMultiplier: 0.65, // Decreased from 1.0 -> 0.65 to calm mouse wheel speed & sensitivity
+      touchMultiplier: 0.9,  // Decreased from 1.5 -> 0.9 to prevent trackpad flying
     });
 
     (window as any).__lenis = lenis;
