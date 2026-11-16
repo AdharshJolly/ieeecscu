@@ -1,14 +1,20 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-@custom-variant dark (&:is(.dark *));
+/* Dark mode selector for class on root <html> */
+@custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --ieee-primary: #00B5E2;
-  --ieee-secondary: #00629B;
-  --ieee-yellow: #FFD100;
+  --background: #F2F7F6; /* Crisp Mint/Porcelain tech canvas */
+  --foreground: #091316;
+  --ieee-primary: #00857C; /* Official IEEE Tech Teal */
+  --ieee-secondary: #00A89D;
+  --ieee-cyan: #00C4B4; /* Luminous Teal-Cyan highlight */
+  --ieee-navy: #060B12; /* Deep Obsidian */
+  --ieee-surface: #FFFFFF;
+  --ieee-surface-dark: #0D1622;
+  --ieee-yellow: #EAA700; /* Official IEEE Accent Gold */
+  --ieee-gold: #FFB800;
 }
 
 @theme inline {
@@ -16,41 +22,112 @@
   --color-foreground: var(--foreground);
   --color-ieee-primary: var(--ieee-primary);
   --color-ieee-secondary: var(--ieee-secondary);
+  --color-ieee-cyan: var(--ieee-cyan);
+  --color-ieee-navy: var(--ieee-navy);
+  --color-ieee-surface: var(--ieee-surface);
+  --color-ieee-surface-dark: var(--ieee-surface-dark);
   --color-ieee-yellow: var(--ieee-yellow);
+  --color-ieee-gold: var(--ieee-gold);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 .dark {
-  --background: #0f172a; /* darker blue-gray background for tech feel */
-  --foreground: #f8fafc;
-  --ieee-primary: #00B5E2;
-  --ieee-secondary: #0ea5e9; /* Lighten secondary slightly for dark mode */
-  --ieee-yellow: #FFD100;
+  --background: #060B12; /* Deep Tech Obsidian */
+  --foreground: #F3F8F8;
+  --ieee-primary: #00A89D; /* Luminous Tech Teal */
+  --ieee-secondary: #00C4B4;
+  --ieee-cyan: #22E1D2; /* Vibrant Neon Mint */
+  --ieee-navy: #060B12;
+  --ieee-surface: #0E1825;
+  --ieee-surface-dark: #121F30;
+  --ieee-yellow: #FFB800;
+  --ieee-gold: #FFC933;
+}
+
+/* 3D Perspective Utilities for Playing Cards */
+.perspective-1000 {
+  perspective: 1000px;
+}
+.perspective-2000 {
+  perspective: 2000px;
+}
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+/* Lenis Smooth Scrolling Optimization */
+html.lenis, html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+}
+
+/* IEEE Tech Dot Grid Background */
+.ieee-grid-pattern {
+  background-image: radial-gradient(rgba(0, 168, 157, 0.12) 1px, transparent 1px);
+  background-size: 26px 26px;
+}
+.dark .ieee-grid-pattern {
+  background-image: radial-gradient(rgba(0, 196, 180, 0.14) 1px, transparent 1px);
+  background-size: 26px 26px;
+}
+
+/* IEEE Teal Glass Card Styling */
+.ieee-glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 133, 124, 0.15);
+  box-shadow: 0 4px 24px -2px rgba(0, 133, 124, 0.08);
+}
+.dark .ieee-glass {
+  background: rgba(14, 24, 37, 0.85);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.6);
 }
 
 @keyframes float {
   0% { transform: translateY(0px) rotate(var(--tw-rotate, 0deg)); }
-  50% { transform: translateY(-20px) rotate(var(--tw-rotate, 0deg)); }
+  50% { transform: translateY(-16px) rotate(var(--tw-rotate, 0deg)); }
   100% { transform: translateY(0px) rotate(var(--tw-rotate, 0deg)); }
 }
 
 @keyframes blob {
   0% { transform: translate(0px, 0px) scale(1); }
-  33% { transform: translate(30px, -50px) scale(1.1); }
-  66% { transform: translate(-20px, 20px) scale(0.9); }
+  33% { transform: translate(25px, -35px) scale(1.08); }
+  66% { transform: translate(-20px, 20px) scale(0.95); }
   100% { transform: translate(0px, 0px) scale(1); }
 }
 
-@keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+@keyframes cardShuffle {
+  0% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.03) rotate(-3deg); }
+  100% { transform: scale(1) rotate(0deg); }
 }
 
 .animate-float {
@@ -58,11 +135,11 @@ body {
 }
 
 .animate-blob {
-  animation: blob 7s infinite;
+  animation: blob 8s infinite ease-in-out;
 }
 
-.animate-fade-in {
-  animation: fade-in 0.3s ease-out forwards;
+.animate-shuffle {
+  animation: cardShuffle 2s ease-in-out infinite;
 }
 
 .animation-delay-2000 {
@@ -75,27 +152,26 @@ body {
 
 /* Custom sleek scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(148, 163, 184, 0.5); /* slate-400 */
+  background-color: rgba(0, 133, 124, 0.35);
   border-radius: 9999px;
 }
 .dark ::-webkit-scrollbar-thumb {
-  background-color: rgba(71, 85, 105, 0.5); /* slate-600 */
+  background-color: rgba(0, 196, 180, 0.35);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(148, 163, 184, 0.8);
+  background-color: rgba(0, 133, 124, 0.7);
 }
 .dark ::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(71, 85, 105, 0.8);
+  background-color: rgba(0, 196, 180, 0.7);
 }
 
-/* Utility to completely hide scrollbar */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
