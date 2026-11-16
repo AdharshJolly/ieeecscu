@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
@@ -61,168 +61,122 @@ const SHOWCASE_ITEMS: ShowcaseItem[] = [
 
 export default function HorizontalShowcase() {
   const targetRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   const { scrollYProgress } = useScroll({
     target: targetRef,
     offset: ["start start", "end end"],
   });
 
-  // Transform vertical scroll to horizontal percentage
-  const x = useTransform(scrollYProgress, [0, 1], ["1%", "-55%"]);
+  // Smooth responsive horizontal translation:
+  // On mobile (narrow screen), track translates further to reveal all 4 cards
+  // On desktop, translates to -54%
+  const xMobile = useTransform(scrollYProgress, [0, 1], ["0%", "-78%"]);
+  const xDesktop = useTransform(scrollYProgress, [0, 1], ["0%", "-52%"]);
+  const x = isMobile ? xMobile : xDesktop;
 
   return (
-    <>
-      {/* Desktop Sticky Horizontal Scroll Experience */}
-      <section ref={targetRef} className="relative h-[220vh] hidden lg:block">
-        <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden bg-slate-100/60 dark:bg-[#060B12] transition-colors border-y border-slate-200/80 dark:border-white/10">
-          
-          {/* Section Header */}
-          <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full mb-8">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-ieee-primary dark:text-ieee-cyan mb-2">
-                  <span className="w-2 h-2 rounded-full bg-ieee-cyan animate-pulse" />
-                  Marquee Milestones
-                </div>
-                <h2 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-                  Flagship <span className="text-transparent bg-clip-text bg-gradient-to-r from-ieee-primary to-ieee-cyan">Showcase</span>
-                </h2>
+    <section
+      ref={targetRef}
+      className="relative h-[250vh] w-full bg-slate-100/60 dark:bg-[#060B12] transition-colors border-y border-slate-200/80 dark:border-white/10"
+    >
+      {/* Pinned Sticky Viewport (Works on BOTH Mobile and Desktop!) */}
+      <div className="sticky top-0 h-screen w-full flex flex-col justify-center overflow-hidden">
+        
+        {/* Section Header */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mb-4 sm:mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-ieee-primary dark:text-ieee-cyan mb-1 sm:mb-2">
+                <span className="w-2 h-2 rounded-full bg-ieee-cyan animate-pulse" />
+                Marquee Milestones
               </div>
-              <p className="text-sm font-bold text-ieee-primary dark:text-ieee-cyan flex items-center gap-2">
-                <span>Scroll vertically to advance showcase</span>
-                <span className="animate-bounce">&rarr;</span>
-              </p>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
+                Flagship <span className="text-transparent bg-clip-text bg-gradient-to-r from-ieee-primary to-ieee-cyan">Showcase</span>
+              </h2>
             </div>
+            <p className="text-xs sm:text-sm font-bold text-ieee-primary dark:text-ieee-cyan flex items-center gap-2">
+              <span>Scroll down to advance showcase</span>
+              <span className="animate-bounce">&rarr;</span>
+            </p>
           </div>
+        </div>
 
-          {/* Horizontal Track */}
-          <div className="w-full overflow-hidden pl-6 lg:pl-12">
-            <motion.div style={{ x }} className="flex gap-8 w-max pr-12">
-              {SHOWCASE_ITEMS.map((item) => (
-                <div
-                  key={item.id}
-                  className="w-[460px] h-[490px] rounded-3xl overflow-hidden bg-white dark:bg-[#0D1826] border border-slate-200/80 dark:border-white/10 shadow-xl dark:shadow-2xl flex flex-col group hover:border-ieee-cyan/60 transition-all duration-300 shrink-0"
-                >
-                  <div className="relative h-64 w-full overflow-hidden bg-slate-100 dark:bg-[#060B12]">
-                    <Image
-                      src={item.imageUrl}
-                      alt={item.title}
-                      fill
-                      className="object-cover transition-transform duration-700 group-hover:scale-108"
-                      sizes="460px"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent" />
-                    <div className="absolute top-4 left-4">
-                      <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-gradient-to-r from-ieee-primary to-ieee-cyan text-white shadow-md">
-                        {item.badge}
-                      </span>
-                    </div>
-                    <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end text-white">
-                      <span className="text-xs font-bold uppercase tracking-wider text-ieee-cyan">
-                        {item.category}
-                      </span>
-                      <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-white/20 backdrop-blur-md">
-                        {item.year}
-                      </span>
-                    </div>
+        {/* Pinned Horizontal Scrolling Track */}
+        <div className="w-full overflow-hidden pl-4 sm:pl-6 lg:pl-12">
+          <motion.div
+            style={{ x }}
+            className="flex gap-4 sm:gap-6 lg:gap-8 w-max pr-6 sm:pr-12"
+          >
+            {SHOWCASE_ITEMS.map((item) => (
+              <div
+                key={item.id}
+                className="w-[280px] sm:w-[360px] lg:w-[440px] h-[390px] sm:h-[450px] lg:h-[480px] rounded-3xl overflow-hidden bg-white dark:bg-[#0D1826] border border-slate-200/80 dark:border-white/10 shadow-xl dark:shadow-2xl flex flex-col group hover:border-ieee-cyan/60 transition-all duration-300 shrink-0"
+              >
+                {/* Image & Badges */}
+                <div className="relative h-44 sm:h-56 lg:h-64 w-full overflow-hidden bg-slate-100 dark:bg-[#060B12]">
+                  <Image
+                    src={item.imageUrl}
+                    alt={item.title}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    sizes="(max-width: 640px) 280px, (max-width: 1024px) 360px, 440px"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent" />
+                  
+                  <div className="absolute top-3 left-3 sm:top-4 sm:left-4">
+                    <span className="px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider bg-gradient-to-r from-ieee-primary to-ieee-cyan text-white shadow-md">
+                      {item.badge}
+                    </span>
                   </div>
 
-                  <div className="p-6 flex flex-col flex-grow justify-between">
-                    <div>
-                      <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-2 line-clamp-1 group-hover:text-ieee-cyan transition-colors">
-                        {item.title}
-                      </h3>
-                      <p className="text-sm text-slate-600 dark:text-slate-300 line-clamp-3 leading-relaxed">
-                        {item.description}
-                      </p>
-                    </div>
-
-                    <div className="pt-4 border-t border-slate-100 dark:border-white/10 flex items-center justify-between">
-                      <Link
-                        href={item.link}
-                        className="inline-flex items-center text-sm font-bold text-ieee-primary dark:text-ieee-cyan group-hover:translate-x-1 transition-transform"
-                      >
-                        Explore Details
-                        <svg className="w-4 h-4 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                        </svg>
-                      </Link>
-                    </div>
+                  <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 flex justify-between items-end text-white">
+                    <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-ieee-cyan truncate max-w-[200px]">
+                      {item.category}
+                    </span>
+                    <span className="text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-full bg-white/20 backdrop-blur-md">
+                      {item.year}
+                    </span>
                   </div>
                 </div>
-              ))}
-            </motion.div>
-          </div>
-        </div>
-      </section>
 
-      {/* Mobile/Tablet Horizontal Scroll Carousel */}
-      <section className="lg:hidden py-16 bg-slate-100/60 dark:bg-[#050914] border-y border-slate-200/80 dark:border-white/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 mb-8">
-          <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-ieee-primary dark:text-ieee-cyan mb-2">
-            <span className="w-2 h-2 rounded-full bg-ieee-cyan animate-pulse" />
-            Marquee Milestones
-          </div>
-          <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
-            Flagship <span className="text-transparent bg-clip-text bg-gradient-to-r from-ieee-primary to-ieee-cyan">Showcase</span>
-          </h2>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">
-            Swipe sideways to view key events &rarr;
-          </p>
-        </div>
+                {/* Card Content */}
+                <div className="p-4 sm:p-6 flex flex-col flex-grow justify-between">
+                  <div>
+                    <h3 className="text-lg sm:text-xl lg:text-2xl font-black text-slate-900 dark:text-white mb-1.5 sm:mb-2 line-clamp-1 group-hover:text-ieee-cyan transition-colors">
+                      {item.title}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 line-clamp-3 leading-relaxed">
+                      {item.description}
+                    </p>
+                  </div>
 
-        <div className="flex gap-6 overflow-x-auto px-4 sm:px-6 pb-6 no-scrollbar snap-x snap-mandatory">
-          {SHOWCASE_ITEMS.map((item) => (
-            <div
-              key={item.id}
-              className="w-[320px] sm:w-[380px] rounded-3xl overflow-hidden bg-white dark:bg-[#0C162E] border border-slate-200/80 dark:border-white/10 shadow-lg flex flex-col shrink-0 snap-center"
-            >
-              <div className="relative h-48 w-full bg-slate-100 dark:bg-[#080E1E]">
-                <Image
-                  src={item.imageUrl}
-                  alt={item.title}
-                  fill
-                  className="object-cover"
-                  sizes="380px"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent" />
-                <div className="absolute top-3 left-3">
-                  <span className="px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider bg-ieee-primary text-white shadow-md">
-                    {item.badge}
-                  </span>
-                </div>
-                <div className="absolute bottom-3 left-3 right-3 flex justify-between items-end text-white">
-                  <span className="text-xs font-bold uppercase tracking-wider text-ieee-cyan">
-                    {item.category}
-                  </span>
-                  <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-white/20 backdrop-blur-md">
-                    {item.year}
-                  </span>
+                  <div className="pt-3 sm:pt-4 border-t border-slate-100 dark:border-white/10 flex items-center justify-between">
+                    <Link
+                      href={item.link}
+                      className="inline-flex items-center text-xs sm:text-sm font-bold text-ieee-primary dark:text-ieee-cyan group-hover:translate-x-1 transition-transform"
+                    >
+                      Explore Details
+                      <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                      </svg>
+                    </Link>
+                  </div>
                 </div>
               </div>
-
-              <div className="p-5 flex flex-col flex-grow justify-between">
-                <div>
-                  <h3 className="text-xl font-black text-slate-900 dark:text-white mb-2">
-                    {item.title}
-                  </h3>
-                  <p className="text-xs text-slate-600 dark:text-slate-300 line-clamp-3 leading-relaxed">
-                    {item.description}
-                  </p>
-                </div>
-
-                <div className="pt-4 mt-4 border-t border-slate-100 dark:border-white/10 flex items-center justify-between">
-                  <Link
-                    href={item.link}
-                    className="inline-flex items-center text-xs font-bold text-ieee-primary dark:text-ieee-cyan"
-                  >
-                    Explore &rarr;
-                  </Link>
-                </div>
-              </div>
-            </div>
-          ))}
+            ))}
+          </motion.div>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }

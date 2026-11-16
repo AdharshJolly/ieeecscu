@@ -155,7 +155,7 @@ export default function TeamDeck({
               <div className="absolute w-72 h-96 bg-gradient-to-tr from-ieee-primary/30 via-ieee-cyan/30 to-amber-500/20 blur-[80px] rounded-full pointer-events-none -z-10" />
 
               {/* The Pile of Cards */}
-              <div className="relative w-[320px] sm:w-[340px] h-[460px] group">
+              <div className="relative w-[280px] sm:w-[340px] h-[410px] sm:h-[460px] group">
                 {sortedBearers.map((bearer, index) => {
                   const rotation = DECK_ROTATIONS[index % DECK_ROTATIONS.length];
                   const xOffset = DECK_X_OFFSETS[index % DECK_X_OFFSETS.length];
