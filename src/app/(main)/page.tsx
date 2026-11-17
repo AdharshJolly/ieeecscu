@@ -7,7 +7,7 @@ import { FadeIn } from "@/components/MotionWrapper";
 import KineticText from "@/components/KineticText";
 import StackedCards from "@/components/StackedCards";
 import HorizontalShowcase from "@/components/HorizontalShowcase";
-import QuantumPortalHero from "@/components/QuantumPortalHero";
+import Hero from "@/components/Hero";
 
 export const metadata: Metadata = {
   title: "IEEE CS CU Student Branch Chapter | CHRIST University",
@@ -29,8 +29,8 @@ export default async function Home() {
     <>
       <div className="w-full bg-slate-50 dark:bg-[#060B12] transition-colors duration-300">
         
-        {/* QUANTUM PORTAL & PINNED SCROLL HERO */}
-        <QuantumPortalHero />
+        {/* HIGH-IMPACT HERO SECTION */}
+        <Hero />
 
         {/* CHAPTER MISSION & OVERVIEW SECTION (WITH KINETIC WORD-BY-WORD TEXT) */}
         <section className="py-28 bg-white dark:bg-[#08101A] border-t border-slate-200/80 dark:border-white/10 overflow-hidden transition-colors">

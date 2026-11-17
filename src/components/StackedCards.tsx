@@ -244,7 +244,7 @@ export default function StackedCards() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Track overall scroll progress through the entire 4-card sequence
+  // Track overall scroll progress through the entire 4-card sequence + resistance buffer
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
@@ -266,12 +266,13 @@ export default function StackedCards() {
         </p>
       </div>
 
-      {/* The 4-Card Stacked Deck Container */}
-      <div ref={containerRef} className="relative w-full pb-[30vh] sm:pb-[40vh]">
+      {/* The 4-Card Stacked Deck Container with Resistance Buffer */}
+      <div ref={containerRef} className="relative w-full">
         {PILLARS.map((pillar, index) => {
-          // As subsequent cards enter, preceding cards scale down subtly
+          // As subsequent cards enter, preceding cards scale down subtly until all cards are stacked
           const targetScale = 1 - (PILLARS.length - index - 1) * 0.04;
-          const rangeStart = index * 0.22;
+          const rangeStart = index * 0.20;
+          const rangeEnd = 0.78; // All card scaling completes as Card 04 lands
 
           return (
             <DeckCardItem
@@ -279,12 +280,21 @@ export default function StackedCards() {
               index={index}
               pillar={pillar}
               progress={scrollYProgress}
-              range={[rangeStart, 1.0]}
+              range={[rangeStart, Math.max(rangeStart + 0.05, rangeEnd)]}
               targetScale={targetScale}
               isMobile={isMobile}
             />
           );
         })}
+
+        {/*
+          Dedicated Resistance Runway for Card 04:
+          Holds the final completed 4-card stack stationary in the dead center of the screen
+          for ~75vh (mobile) / ~85vh (desktop) of comfortable scrolling.
+          This gives the viewer the exact right amount of resistance to notice and read Card 04
+          before smoothly transitioning to the next section!
+        */}
+        <div className="h-[75vh] sm:h-[85vh] w-full pointer-events-none" />
       </div>
     </section>
   );
