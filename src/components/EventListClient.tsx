@@ -6,23 +6,41 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 export default function EventListClient({ initialEvents }: { initialEvents: any[] }) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [timelineFilter, setTimelineFilter] = useState<'upcoming' | 'past' | 'all'>('upcoming');
+  const [timelineFilter, setTimelineFilter] = useState<'all' | 'upcoming' | 'past'>('all');
 
-  const filteredEvents = initialEvents.filter(event => {
+  const filteredEvents = (initialEvents || []).filter(event => {
     // Timeline filter
     const eventDate = new Date(event.date);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     
-    if (timelineFilter === 'upcoming' && eventDate < today) return false;
-    if (timelineFilter === 'past' && eventDate >= today) return false;
+    const hasValidDate = !isNaN(eventDate.getTime());
+    if (hasValidDate) {
+      const eventDay = new Date(eventDate);
+      eventDay.setHours(0, 0, 0, 0);
+
+      if (timelineFilter === 'upcoming' && eventDay < today) return false;
+      if (timelineFilter === 'past' && eventDay > today) return false;
+    }
 
     // Search filter
-    const query = searchQuery.toLowerCase();
-    const title = event.title ? event.title.toLowerCase() : "";
-    const date = event.date ? event.date.toString().toLowerCase() : "";
-    const type = event.type ? event.type.toLowerCase() : "";
-    return title.includes(query) || date.includes(query) || type.includes(query);
+    if (!searchQuery.trim()) return true;
+    const query = searchQuery.toLowerCase().trim();
+    const title = (event.title || "").toLowerCase();
+    const type = (event.type || "").toLowerCase();
+    const description = (event.description || "").toLowerCase();
+    const location = (event.location || "").toLowerCase();
+    const formattedDate = hasValidDate 
+      ? eventDate.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }).toLowerCase()
+      : (event.date ? event.date.toString().toLowerCase() : "");
+
+    return (
+      title.includes(query) ||
+      type.includes(query) ||
+      description.includes(query) ||
+      location.includes(query) ||
+      formattedDate.includes(query)
+    );
   });
 
   return (
@@ -31,15 +49,15 @@ export default function EventListClient({ initialEvents }: { initialEvents: any[
       <div className="mb-12 max-w-4xl mx-auto flex flex-col md:flex-row gap-6 items-center">
         
         {/* Timeline Toggle */}
-        <div className="flex bg-slate-100 dark:bg-slate-800 p-1.5 rounded-full shrink-0">
-          {(['upcoming', 'past', 'all'] as const).map((filter) => (
+        <div className="flex bg-slate-200/70 dark:bg-[#0B152B] p-1.5 rounded-full shrink-0 border border-slate-300/50 dark:border-white/10 shadow-inner">
+          {(['all', 'upcoming', 'past'] as const).map((filter) => (
             <button
               key={filter}
               onClick={() => setTimelineFilter(filter)}
-              className={`px-6 py-2.5 rounded-full font-bold text-sm capitalize transition-all duration-300 ${
+              className={`px-6 py-2 rounded-full font-bold text-sm capitalize transition-all duration-300 ${
                 timelineFilter === filter 
-                  ? 'bg-white dark:bg-slate-700 text-ieee-primary shadow-sm' 
-                  : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+                  ? 'bg-ieee-primary text-white shadow-md shadow-ieee-primary/30' 
+                  : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               {filter}
@@ -79,9 +97,9 @@ export default function EventListClient({ initialEvents }: { initialEvents: any[
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 xl:gap-10">
         <AnimatePresence>
-          {filteredEvents.map((event: any) => (
+          {filteredEvents.map((event: any, idx: number) => (
             <motion.div
-              key={event._id}
+              key={event._id || event.title || idx}
               layout
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
