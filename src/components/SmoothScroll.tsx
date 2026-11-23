@@ -1,26 +1,40 @@
 "use client";
 
 import { useEffect, ReactNode } from "react";
+import { usePathname } from "next/navigation";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
 
 export default function SmoothScroll({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
+
+  // Reset scroll position on route change
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      if ((window as any).__lenis) {
+        (window as any).__lenis.scrollTo(0, { immediate: true });
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+  }, [pathname]);
+
   useEffect(() => {
     // Respect user's motion preferences
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReducedMotion) return;
 
-    // Dampened, heavyweight scrolling configuration
-    // Lower wheelMultiplier and touchMultiplier reduce sensitivity and speed
-    // Longer duration creates smooth, cinematic momentum and deliberate pacing
+    // Smooth desktop mouse wheel configuration
+    // syncTouch: false prevents Lenis from hijacking mobile touch taps/clicks
     const lenis = new Lenis({
-      duration: 1.5, // Heavier, smoother momentum dampening (was 1.1)
+      duration: 1.3,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: "vertical",
       gestureOrientation: "vertical",
       smoothWheel: true,
-      wheelMultiplier: 0.65, // Decreased from 1.0 -> 0.65 to calm mouse wheel speed & sensitivity
-      touchMultiplier: 0.9,  // Decreased from 1.5 -> 0.9 to prevent trackpad flying
+      wheelMultiplier: 0.7,
+      touchMultiplier: 0,
+      syncTouch: false,
     });
 
     (window as any).__lenis = lenis;
